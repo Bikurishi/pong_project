@@ -246,3 +246,15 @@
             transform: scale(1.1) !important;
             opacity: 1 !important;
         }
+
+        /* Mobile Optimization */
+        @media screen and (orientation: portrait) and (max-width: 900px) {
+            #rotate-prompt {
+                display: flex !important;
+                z-index: 9999;
+                background: var(--bg-dark);
+            }
+            #game-container > :not(#rotate-prompt) {
+                display: none !important;
+            }
+        }

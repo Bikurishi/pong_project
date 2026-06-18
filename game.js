@@ -514,7 +514,9 @@
 
         for (let i = 0; i < 4; i++) {
             const slot = document.getElementById(`slot-${i}`);
-            slot.addEventListener('click', () => {
+            
+            const handleSlotActivate = (e) => {
+                if (e && e.cancelable) e.preventDefault();
                 Synth.init(); // Initialize audio context on player HUD click
                 if (gameState === 'playing' && player.stunTimer <= 0) {
                     const abi = abilities[i];
@@ -525,7 +527,10 @@
                         }
                     }
                 }
-            });
+            };
+            
+            slot.addEventListener('click', handleSlotActivate);
+            slot.addEventListener('touchstart', handleSlotActivate, { passive: false });
             slot.style.cursor = 'pointer';
         }
 
