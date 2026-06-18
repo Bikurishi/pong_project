@@ -26,7 +26,7 @@
             { name: "The Titan", color: "#ff3300", baseH: 120, baseAiSpeed: 0.03, ballAdd: 1.5 },
             { name: "The Pulsar", color: "#ffff00", baseH: 110, baseAiSpeed: 0.08, ballAdd: 4.5 },
             { name: "Primordial Knight", color: "#ff2e2e", baseH: 90, baseAiSpeed: 0.11, ballAdd: 6.0, unlock: "The Final Soul" },
-            { name: "Gaismagorm", color: "#6a00ff", baseH: 180, baseAiSpeed: 0.02, ballAdd: 7.5, unlock: "QUEST COMPLETE" }
+            { name: "Gaismagorm", color: "#6a00ff", baseH: 120, baseAiSpeed: 0.02, ballAdd: 7.5, unlock: "QUEST COMPLETE" }
         ];
 
         let activeLevels = [];
@@ -584,12 +584,16 @@
             slot.classList.add('active-glow');
             
             if (abi.id === 'final') {
-                balls.push({
-                    x: player.x + player.w + 20, y: player.y + player.h / 2,
-                    dx: 35, dy: (Math.random() - 0.5) * 10, r: 10, speed: 35,
-                    trail: [], isOvercharged: true
-                });
-                Synth.playOsc(150, 'sawtooth', 0.5, 1.0, Synth.ctx.currentTime);
+                for (let i = -2; i <= 2; i++) {
+                    setTimeout(() => {
+                        balls.push({
+                            x: player.x + player.w + 20, y: player.y + player.h / 2,
+                            dx: 22, dy: i * 4, r: 8, speed: 22,
+                            trail: [], isOvercharged: true
+                        });
+                        Synth.playOsc(200 + i * 50, 'sawtooth', 0.3, 0.5, Synth.ctx.currentTime);
+                    }, (i + 2) * 150);
+                }
             }
             
             setTimeout(() => { abi.active = false; slot.classList.remove('active-glow'); }, abi.duration);
@@ -1104,26 +1108,13 @@
                     } else if (currentLevel === 6) { // STANDARD PLAY GAISMAGORM ACTIONS
                         ai.charge += 0.04;
                         ai.skyLaserTimer++;
-                        if (ai.skyLaserTimer > 500) {
-                            let targetY1 = player.y + player.h / 2;
-                            let targetY2 = targetY1 + (Math.random() > 0.5 ? 150 : -150);
-                            ai.skyLaserMarkers = [targetY1, targetY2];
+                        if (ai.skyLaserTimer > 350) {
+                            ai.skyLaserMarkers = [Math.random() * 300 + 50, Math.random() * 300 + 350];
                             ai.skyLaserTimer = 0;
-                            ai.isSkyLaserWarning = true;
-                            
                             setTimeout(() => {
-                                ai.isSkyLaserWarning = false;
-                            }, 900);
-                            
-                            setTimeout(() => {
-                                ai.skyLaserMarkers.forEach(my => { bossProjectiles.push({ x: 1200, y: my, dx: -25, dy: 0, r: 10, isSkyBeam: true }); });
+                                ai.skyLaserMarkers.forEach(mx => { bossProjectiles.push({ x: mx, y: 0, dx: 0, dy: 15, r: 10, isSkyBeam: true }); });
                                 ai.skyLaserMarkers = [];
                             }, 1200);
-                        }
-                        
-                        if (ai.isSkyLaserWarning) {
-                            ai.skyLaserMarkers[0] += (player.y + player.h / 2 - ai.skyLaserMarkers[0]) * 0.1;
-                            ai.skyLaserMarkers[1] += (player.y + player.h / 2 + 150 - ai.skyLaserMarkers[1]) * 0.1;
                         }
 
                         if (!ai.isSwiping && !ai.isGrabbing && Math.random() < 0.01 && targetBall.x > 700) {
@@ -1528,11 +1519,11 @@
             if (player.stunTimer > 0) { ctx.shadowBlur = 25; ctx.shadowColor = "#ff2e2e"; ctx.fillStyle = (player.stunTimer % 10 < 5) ? "#ff2e2e" : "#880000"; }
             else { ctx.shadowBlur = 20; ctx.shadowColor = player.color; ctx.fillStyle = player.color; }
             ctx.fillRect(player.x, player.y, player.w, player.h);
-            ai.skyLaserMarkers.forEach(my => { ctx.strokeStyle = "rgba(255, 0, 0, 0.3)"; ctx.setLineDash([5, 5]); ctx.beginPath(); ctx.moveTo(0, my); ctx.lineTo(1200, my); ctx.stroke(); ctx.setLineDash([]); });
+            ai.skyLaserMarkers.forEach(mx => { ctx.strokeStyle = "rgba(255, 0, 0, 0.3)"; ctx.setLineDash([5, 5]); ctx.beginPath(); ctx.moveTo(mx, 0); ctx.lineTo(mx, 600); ctx.stroke(); ctx.setLineDash([]); });
             
             bossProjectiles.forEach(p => {
                 ctx.save(); ctx.shadowBlur = 25; ctx.shadowColor = "red";
-                if (p.isSkyBeam) { ctx.fillStyle = "white"; ctx.fillRect(p.x - 100, p.y - 4, 200, 8); ctx.fillStyle = "red"; ctx.globalAlpha = 0.4; ctx.fillRect(p.x - 120, p.y - 12, 240, 24); }
+                if (p.isSkyBeam) { ctx.fillStyle = "white"; ctx.fillRect(p.x - 4, p.y - 100, 8, 200); ctx.fillStyle = "red"; ctx.globalAlpha = 0.4; ctx.fillRect(p.x - 12, p.y - 120, 24, 240); }
                 else { ctx.fillStyle = "white"; ctx.fillRect(p.x, p.y - 2, 100, 4); ctx.fillStyle = "red"; ctx.globalAlpha = 0.4; ctx.fillRect(p.x - 20, p.y - 6, 140, 12); }
                 ctx.restore();
             });
