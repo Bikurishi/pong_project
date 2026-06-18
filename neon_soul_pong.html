@@ -30,7 +30,9 @@
         }
 
         #game-container {
-            position: relative;
+            position: absolute;
+            top: 50%;
+            left: 50%;
             width: 800px;
             height: 400px;
             flex-shrink: 0;
@@ -251,9 +253,29 @@
         .show-banner {
             transform: scale(1.1) !important;
             opacity: 1 !important;
+        #rotate-warning {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            background: rgba(10, 10, 18, 0.95);
+            z-index: 9999;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: var(--neon-blue);
         }
 
         /* Mobile Optimization */
+        @media screen and (orientation: portrait) and (max-width: 900px) {
+            #rotate-warning {
+                display: flex;
+            }
+            #game-container {
+                display: none !important;
+            }
+        }
+
         @media screen and (max-width: 900px) {
             .settings-modal {
                 max-height: 80vw;
@@ -263,6 +285,11 @@
 </style>
 </head>
 <body>
+    <div id="rotate-warning">
+        <h1 style="font-size: 4rem; margin: 0; text-shadow: 0 0 20px var(--neon-blue);">🔄</h1>
+        <h2>ROTATE DEVICE</h2>
+        <p>Neon Soul Pong requires Landscape mode.</p>
+    </div>
 
     <div id="game-container">
         <div id="stats-bar">
@@ -415,7 +442,7 @@
         function resizeGame() {
             if (container) {
                 const scale = Math.min(window.innerWidth / 800, window.innerHeight / 400) * 0.95;
-                container.style.transform = `scale(${Math.min(scale, 1.5)})`; // Cap upscale at 1.5x on huge screens
+                container.style.transform = `translate(-50%, -50%) scale(${Math.min(scale, 1.5)})`; // Cap upscale at 1.5x on huge screens
             }
         }
         window.addEventListener('resize', resizeGame);

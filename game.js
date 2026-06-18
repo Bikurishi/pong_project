@@ -19,7 +19,7 @@
         function resizeGame() {
             if (container) {
                 const scale = Math.min(window.innerWidth / 800, window.innerHeight / 400) * 0.95;
-                container.style.transform = `scale(${Math.min(scale, 1.5)})`; // Cap upscale at 1.5x on huge screens
+                container.style.transform = `translate(-50%, -50%) scale(${Math.min(scale, 1.5)})`; // Cap upscale at 1.5x on huge screens
             }
         }
         window.addEventListener('resize', resizeGame);
