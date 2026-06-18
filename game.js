@@ -18,8 +18,11 @@
 
         function resizeGame() {
             if (container) {
-                const scale = Math.min(window.innerWidth / 800, window.innerHeight / 400) * 0.95;
-                container.style.transform = `translate(-50%, -50%) scale(${Math.min(scale, 1.5)})`; // Cap upscale at 1.5x on huge screens
+                const isPortrait = window.innerHeight > window.innerWidth;
+                const baseW = isPortrait ? 400 : 800;
+                const baseH = isPortrait ? 800 : 400;
+                const scale = Math.min(window.innerWidth / baseW, window.innerHeight / baseH) * 0.95;
+                container.style.transform = `translate(-50%, -50%) scale(${Math.min(scale, 1.5)})`;
             }
         }
         window.addEventListener('resize', resizeGame);
@@ -588,9 +591,18 @@
 
         function getCanvasCoords(clientX, clientY, canvas) {
             const rect = canvas.getBoundingClientRect();
-            const x = ((clientX - rect.left) / rect.width) * 1200;
-            const y = ((clientY - rect.top) / rect.height) * 600;
-            return { x, y };
+            // If the canvas is rotated -90deg via CSS, its layout bounding box is taller than it is wide.
+            if (rect.height > rect.width) {
+                const percentX = (clientX - rect.left) / rect.width;
+                const percentY = (clientY - rect.top) / rect.height;
+                const y = percentX * 600;
+                const x = (1 - percentY) * 1200;
+                return { x, y };
+            } else {
+                const x = ((clientX - rect.left) / rect.width) * 1200;
+                const y = ((clientY - rect.top) / rect.height) * 600;
+                return { x, y };
+            }
         }
 
         canvas.addEventListener('touchmove', e => {

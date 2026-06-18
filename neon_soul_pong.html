@@ -46,8 +46,11 @@
 
         canvas {
             display: block;
+            position: absolute;
+            top: 0; left: 0;
             width: 100%;
             height: 100%;
+            z-index: 0;
         }
 
         .ui-overlay {
@@ -253,26 +256,33 @@
         .show-banner {
             transform: scale(1.1) !important;
             opacity: 1 !important;
-        #rotate-warning {
-            display: none;
-            position: fixed;
-            top: 0; left: 0; width: 100vw; height: 100vh;
-            background: rgba(10, 10, 18, 0.95);
-            z-index: 9999;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            color: var(--neon-blue);
-        }
-
         /* Mobile Optimization */
-        @media screen and (orientation: portrait) and (max-width: 900px) {
-            #rotate-warning {
-                display: flex;
-            }
+        @media screen and (orientation: portrait) {
             #game-container {
-                display: none !important;
+                width: 400px;
+                height: 800px;
+            }
+            canvas {
+                width: 800px;
+                height: 400px;
+                top: 50%;
+                left: 50%;
+                margin-left: -400px;
+                margin-top: -200px;
+                transform: rotate(-90deg);
+            }
+            #p-score, #a-score {
+                font-size: 2rem !important;
+            }
+            #level-display {
+                font-size: 1.2rem !important;
+            }
+            .ability-slot {
+                width: 50px !important;
+                height: 50px !important;
+            }
+            #boss-charge-bar {
+                top: 70px;
             }
         }
 
@@ -285,12 +295,6 @@
 </style>
 </head>
 <body>
-    <div id="rotate-warning">
-        <h1 style="font-size: 4rem; margin: 0; text-shadow: 0 0 20px var(--neon-blue);">🔄</h1>
-        <h2>ROTATE DEVICE</h2>
-        <p>Neon Soul Pong requires Landscape mode.</p>
-    </div>
-
     <div id="game-container">
         <div id="stats-bar">
             <div class="score" style="color: var(--neon-blue)" id="p-score">0</div>
@@ -441,8 +445,11 @@
 
         function resizeGame() {
             if (container) {
-                const scale = Math.min(window.innerWidth / 800, window.innerHeight / 400) * 0.95;
-                container.style.transform = `translate(-50%, -50%) scale(${Math.min(scale, 1.5)})`; // Cap upscale at 1.5x on huge screens
+                const isPortrait = window.innerHeight > window.innerWidth;
+                const baseW = isPortrait ? 400 : 800;
+                const baseH = isPortrait ? 800 : 400;
+                const scale = Math.min(window.innerWidth / baseW, window.innerHeight / baseH) * 0.95;
+                container.style.transform = `translate(-50%, -50%) scale(${Math.min(scale, 1.5)})`;
             }
         }
         window.addEventListener('resize', resizeGame);
@@ -1011,9 +1018,18 @@
 
         function getCanvasCoords(clientX, clientY, canvas) {
             const rect = canvas.getBoundingClientRect();
-            const x = ((clientX - rect.left) / rect.width) * 1200;
-            const y = ((clientY - rect.top) / rect.height) * 600;
-            return { x, y };
+            // If the canvas is rotated -90deg via CSS, its layout bounding box is taller than it is wide.
+            if (rect.height > rect.width) {
+                const percentX = (clientX - rect.left) / rect.width;
+                const percentY = (clientY - rect.top) / rect.height;
+                const y = percentX * 600;
+                const x = (1 - percentY) * 1200;
+                return { x, y };
+            } else {
+                const x = ((clientX - rect.left) / rect.width) * 1200;
+                const y = ((clientY - rect.top) / rect.height) * 600;
+                return { x, y };
+            }
         }
 
         canvas.addEventListener('touchmove', e => {
