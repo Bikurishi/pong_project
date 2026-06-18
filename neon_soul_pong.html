@@ -2045,7 +2045,12 @@
             balls.forEach(b => { const ballColor = b.isOvercharged ? "#fff01f" : (currentLevel === 6 ? "#6a00ff" : "white"); ctx.shadowColor = ballColor; ctx.fillStyle = ballColor; ctx.shadowBlur = 15; ctx.beginPath(); ctx.arc(b.x, b.y, b.r, 0, Math.PI*2); ctx.fill(); });
             
             if (gameState === 'secret_transition') {
-                const p = secretTransitionTimer / 180; ctx.fillStyle = "white"; ctx.font = "bold 60px Segoe UI"; ctx.textAlign = "center"; ctx.fillText("VICTORY", 600, 300);
+                const p = secretTransitionTimer / 180; 
+                ctx.save();
+                ctx.translate(600, 300);
+                if (canvas.getBoundingClientRect().height > canvas.getBoundingClientRect().width) ctx.rotate(Math.PI / 2);
+                ctx.fillStyle = "white"; ctx.font = "bold 60px Segoe UI"; ctx.textAlign = "center"; ctx.fillText("VICTORY", 0, 0);
+                ctx.restore();
                 drawAbyssalHand(1200 + 100 - (p * 500), 300, p * 2.5, p > 0.4 ? "closed" : "open");
                 if (p > 0.4) { ctx.strokeStyle = "rgba(255,255,255," + (p) + ")"; ctx.lineWidth = 2; screenCracks.forEach(c => { ctx.beginPath(); ctx.moveTo(c.x, c.y); ctx.lineTo(c.x + Math.cos(c.angle)*c.len*p, c.y + Math.sin(c.angle)*c.len*p); ctx.stroke(); }); }
                 if (p > 0.8) { ctx.fillStyle = `rgba(106, 0, 255, ${(p-0.8)*5})`; ctx.fillRect(0,0,1200,600); }
@@ -2075,6 +2080,7 @@
                 let sectionFrame = countdownFrames % 60;
                 let scale = 1.0 + (60 - sectionFrame) / 60 * 0.4; // Pulse scale up each second
                 ctx.translate(600, 300);
+                if (canvas.getBoundingClientRect().height > canvas.getBoundingClientRect().width) ctx.rotate(Math.PI / 2);
                 ctx.scale(scale, scale);
                 ctx.fillText(text, 0, 0);
                 ctx.restore();
@@ -2089,6 +2095,7 @@
                 
                 let scale = 1.0 + (30 - goFrames) / 30 * 0.3; // Slight explosive scale out
                 ctx.translate(600, 300);
+                if (canvas.getBoundingClientRect().height > canvas.getBoundingClientRect().width) ctx.rotate(Math.PI / 2);
                 ctx.scale(scale, scale);
                 ctx.globalAlpha = goFrames / 30; // Fade out smoothly
                 ctx.fillText("FIGHT!", 0, 0);
