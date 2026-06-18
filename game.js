@@ -495,22 +495,25 @@
         let secretCode = "";
         
         const secretInput = document.getElementById('secret-password-input');
-        if (secretInput) {
-            secretInput.addEventListener('input', (e) => {
-                if (e.target.value.toLowerCase() === 'sssbiku') {
-                    const chip = document.getElementById('secret-boss-chip');
-                    const opt = document.getElementById('secret-boss-option');
-                    if (chip && opt) {
-                        chip.style.display = 'block';
-                        opt.style.display = 'block';
-                        try { Synth.init(); Synth.playOsc(800, 'square', 0.1, 0.5, Synth.ctx.currentTime); } catch(err){}
-                    }
-                    e.target.value = '';
-                    e.target.style.display = 'none';
-                    e.target.blur();
+        const settingsSecretInput = document.getElementById('settings-secret-input');
+        
+        function handleSecretInput(e) {
+            if (e.target.value.toLowerCase() === 'sssbiku') {
+                const chip = document.getElementById('secret-boss-chip');
+                const opt = document.getElementById('secret-boss-option');
+                if (chip && opt) {
+                    chip.style.display = 'block';
+                    opt.style.display = 'block';
+                    try { Synth.init(); Synth.playOsc(800, 'square', 0.1, 0.5, Synth.ctx.currentTime); } catch(err){}
                 }
-            });
+                if (secretInput) { secretInput.value = ''; secretInput.style.display = 'none'; }
+                if (settingsSecretInput) { settingsSecretInput.value = ''; settingsSecretInput.style.display = 'none'; }
+                e.target.blur();
+            }
         }
+        
+        if (secretInput) secretInput.addEventListener('input', handleSecretInput);
+        if (settingsSecretInput) settingsSecretInput.addEventListener('input', handleSecretInput);
         
         window.addEventListener("keydown", e => {
             keys[e.key] = true;
