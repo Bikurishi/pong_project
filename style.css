@@ -251,8 +251,10 @@
         @media screen and (orientation: portrait) and (max-width: 900px) {
             #game-container {
                 transform: rotate(90deg);
+                transform-origin: center center;
                 width: 95vh;
-                height: 95vw;
+                height: auto;
+                aspect-ratio: 2 / 1;
                 max-width: none;
             }
             .settings-modal {
