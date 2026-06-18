@@ -534,32 +534,44 @@
             slot.style.cursor = 'pointer';
         }
 
+        function getCanvasCoords(clientX, clientY, canvas) {
+            const rect = canvas.getBoundingClientRect();
+            const isPortrait = window.innerHeight > window.innerWidth;
+            let x, y;
+            if (isPortrait) {
+                const percentX = (clientX - rect.left) / rect.width;
+                const percentY = (clientY - rect.top) / rect.height;
+                y = (1 - percentX) * 600;
+                x = percentY * 1200;
+            } else {
+                x = ((clientX - rect.left) / rect.width) * 1200;
+                y = ((clientY - rect.top) / rect.height) * 600;
+            }
+            return { x, y };
+        }
+
         canvas.addEventListener('touchmove', e => {
             e.preventDefault();
-            const rect = canvas.getBoundingClientRect();
             const touch = e.touches[0];
-            const touchX = ((touch.clientX - rect.left) / rect.width) * 1200;
-            const touchY = ((touch.clientY - rect.top) / rect.height) * 600;
+            const coords = getCanvasCoords(touch.clientX, touch.clientY, canvas);
             
             if (ai.isCataclysmActive) {
-                player.x = touchX;
-                player.y = touchY;
+                player.x = coords.x;
+                player.y = coords.y;
             } else {
-                player.targetY = touchY - player.h / 2;
+                player.targetY = coords.y - player.h / 2;
             }
         }, { passive: false });
 
         canvas.addEventListener('mousemove', e => {
             if (gameState === 'playing') {
-                const rect = canvas.getBoundingClientRect();
-                const mouseX = ((e.clientX - rect.left) / rect.width) * 1200;
-                const mouseY = ((e.clientY - rect.top) / rect.height) * 600;
+                const coords = getCanvasCoords(e.clientX, e.clientY, canvas);
                 
                 if (ai.isCataclysmActive) {
-                    player.x = mouseX;
-                    player.y = mouseY;
+                    player.x = coords.x;
+                    player.y = coords.y;
                 } else {
-                    player.targetY = mouseY - player.h / 2;
+                    player.targetY = coords.y - player.h / 2;
                 }
             }
         });
