@@ -81,8 +81,9 @@
 
             <button onclick="startGame()">Enter Arena</button>
             <button class="secondary-btn" onclick="showSettings()">Settings</button>
-            <div style="margin-top: 20px;">
-                <input type="password" id="secret-password-input" placeholder="Admin Override Code" style="background: rgba(0,0,0,0.5); border: 1px dashed #555; color: var(--neon-blue); padding: 8px 12px; outline: none; text-align: center; font-size: 0.85rem; letter-spacing: 2px; width: 200px; transition: 0.3s;" onfocus="this.style.borderColor='var(--neon-blue)'; this.style.boxShadow='0 0 5px var(--neon-blue)'" onblur="this.style.borderColor='#555'; this.style.boxShadow='none'">
+            <div style="margin-top: 20px; display: flex; justify-content: center; gap: 10px; align-items: center;">
+                <input type="password" id="secret-password-input" placeholder="Admin Override Code" style="background: rgba(0,0,0,0.5); border: 1px dashed #555; color: var(--neon-blue); padding: 8px 12px; outline: none; text-align: center; font-size: 0.85rem; letter-spacing: 2px; width: 180px; transition: 0.3s;" onfocus="this.style.borderColor='var(--neon-blue)'; this.style.boxShadow='0 0 5px var(--neon-blue)'" onblur="this.style.borderColor='#555'; this.style.boxShadow='none'">
+                <button onclick="checkAdminPassword()" style="padding: 8px 12px; font-size: 0.85rem; border: 1px solid var(--neon-blue); background: transparent; color: var(--neon-blue); cursor: pointer;">Submit</button>
             </div>
         </div>
 
@@ -112,8 +113,9 @@
                 
                 <p style="font-size: 0.8rem; color: #555; margin-top: 10px;">Win Score: <span id="win-score-preview">25</span></p>
                 
-                <div style="margin-top: 15px; margin-bottom: 15px;">
-                    <input type="password" id="settings-secret-input" placeholder="Admin Override Code" style="background: rgba(0,0,0,0.5); border: 1px dashed #555; color: var(--neon-blue); padding: 8px 12px; outline: none; text-align: center; font-size: 0.85rem; letter-spacing: 2px; width: 200px; transition: 0.3s;" onfocus="this.style.borderColor='var(--neon-blue)'; this.style.boxShadow='0 0 5px var(--neon-blue)'" onblur="this.style.borderColor='#555'; this.style.boxShadow='none'">
+                <div style="margin-top: 15px; margin-bottom: 15px; display: flex; justify-content: center; gap: 10px; align-items: center;">
+                    <input type="password" id="settings-secret-input" placeholder="Admin Override Code" style="background: rgba(0,0,0,0.5); border: 1px dashed #555; color: var(--neon-blue); padding: 8px 12px; outline: none; text-align: center; font-size: 0.85rem; letter-spacing: 2px; width: 180px; transition: 0.3s;" onfocus="this.style.borderColor='var(--neon-blue)'; this.style.boxShadow='0 0 5px var(--neon-blue)'" onblur="this.style.borderColor='#555'; this.style.boxShadow='none'">
+                    <button onclick="checkAdminPassword()" style="padding: 8px 12px; font-size: 0.85rem; border: 1px solid var(--neon-blue); background: transparent; color: var(--neon-blue); cursor: pointer;">Submit</button>
                 </div>
 
                 <button onclick="saveSettings()">Save & Close</button>
