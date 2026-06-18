@@ -504,7 +504,7 @@
             }
             if (gameState === 'playing' && player.stunTimer <= 0) {
                 abilities.forEach((abi, i) => {
-                    if (currentLevel > i + 1 && e.key.toLowerCase() === abi.key.toLowerCase()) {
+                    if (currentLevel > i && e.key.toLowerCase() === abi.key.toLowerCase()) {
                         const now = Date.now();
                         if (now - abi.lastUsed > abi.cd) triggerAbility(abi, i);
                     }
@@ -521,7 +521,7 @@
                 Synth.init(); // Initialize audio context on player HUD click
                 if (gameState === 'playing' && player.stunTimer <= 0) {
                     const abi = abilities[i];
-                    if (currentLevel > i + 1) {
+                    if (currentLevel > i) {
                         const now = Date.now();
                         if (now - abi.lastUsed > abi.cd) {
                             triggerAbility(abi, i);
@@ -710,7 +710,7 @@
                     }
                 }
 
-                if (checkLevel > i + 1) {
+                if (checkLevel > i) {
                     slot.classList.add('unlocked');
                     if (progress > 0) {
                         const remaining = ((abi.cd - elapsed) / 1000).toFixed(1);
@@ -1109,11 +1109,23 @@
                             let targetY2 = targetY1 + (Math.random() > 0.5 ? 150 : -150);
                             ai.skyLaserMarkers = [targetY1, targetY2];
                             ai.skyLaserTimer = 0;
+                            ai.isSkyLaserWarning = true;
+                            
+                            setTimeout(() => {
+                                ai.isSkyLaserWarning = false;
+                            }, 900);
+                            
                             setTimeout(() => {
                                 ai.skyLaserMarkers.forEach(my => { bossProjectiles.push({ x: 1200, y: my, dx: -25, dy: 0, r: 10, isSkyBeam: true }); });
                                 ai.skyLaserMarkers = [];
                             }, 1200);
                         }
+                        
+                        if (ai.isSkyLaserWarning) {
+                            ai.skyLaserMarkers[0] += (player.y + player.h / 2 - ai.skyLaserMarkers[0]) * 0.1;
+                            ai.skyLaserMarkers[1] += (player.y + player.h / 2 + 150 - ai.skyLaserMarkers[1]) * 0.1;
+                        }
+
                         if (!ai.isSwiping && !ai.isGrabbing && Math.random() < 0.01 && targetBall.x > 700) {
                             ai.isSwiping = true; ai.swipeTimer = 40; ai.swipeDir = targetBall.y > ai.y + ai.h/2 ? 1 : -1;
                         }
