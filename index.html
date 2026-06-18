@@ -81,6 +81,9 @@
 
             <button onclick="startGame()">Enter Arena</button>
             <button class="secondary-btn" onclick="showSettings()">Settings</button>
+            <div style="margin-top: 20px;">
+                <input type="password" id="secret-password-input" placeholder="Admin Override Code" style="background: rgba(0,0,0,0.5); border: 1px dashed #444; color: var(--abyssal-purple); padding: 5px 10px; outline: none; text-align: center; font-size: 0.8rem; letter-spacing: 2px; width: 180px; transition: 0.3s;" onfocus="this.style.borderColor='var(--abyssal-purple)'; this.style.boxShadow='0 0 5px var(--abyssal-purple)'" onblur="this.style.borderColor='#444'; this.style.boxShadow='none'">
+            </div>
         </div>
 
         <div id="settings-screen" class="ui-overlay hidden">
