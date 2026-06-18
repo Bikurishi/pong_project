@@ -579,17 +579,8 @@
 
         function getCanvasCoords(clientX, clientY, canvas) {
             const rect = canvas.getBoundingClientRect();
-            const isPortrait = window.innerHeight > window.innerWidth;
-            let x, y;
-            if (isPortrait) {
-                const percentX = (clientX - rect.left) / rect.width;
-                const percentY = (clientY - rect.top) / rect.height;
-                y = percentX * 600;
-                x = (1 - percentY) * 1200;
-            } else {
-                x = ((clientX - rect.left) / rect.width) * 1200;
-                y = ((clientY - rect.top) / rect.height) * 600;
-            }
+            const x = ((clientX - rect.left) / rect.width) * 1200;
+            const y = ((clientY - rect.top) / rect.height) * 600;
             return { x, y };
         }
 
