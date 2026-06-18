@@ -989,7 +989,7 @@
             }
             if (gameState === 'playing' && player.stunTimer <= 0) {
                 abilities.forEach((abi, i) => {
-                    if (currentLevel > i && e.key.toLowerCase() === abi.key.toLowerCase()) {
+                    if (currentLevel > i + 1 && e.key.toLowerCase() === abi.key.toLowerCase()) {
                         const now = Date.now();
                         if (now - abi.lastUsed > abi.cd) triggerAbility(abi, i);
                     }
@@ -1006,7 +1006,7 @@
                 Synth.init(); // Initialize audio context on player HUD click
                 if (gameState === 'playing' && player.stunTimer <= 0) {
                     const abi = abilities[i];
-                    if (currentLevel > i) {
+                    if (currentLevel > i + 1) {
                         const now = Date.now();
                         if (now - abi.lastUsed > abi.cd) {
                             triggerAbility(abi, i);
@@ -1199,7 +1199,7 @@
                     }
                 }
 
-                if (checkLevel > i) {
+                if (checkLevel > i + 1) {
                     slot.classList.add('unlocked');
                     if (progress > 0) {
                         const remaining = ((abi.cd - elapsed) / 1000).toFixed(1);
