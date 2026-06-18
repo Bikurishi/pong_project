@@ -698,6 +698,18 @@
                 const slot = document.getElementById(`slot-${i}`);
                 const cdText = document.getElementById(`cd-text-${i}`);
                 
+                if (i === 4) {
+                    const span = slot.querySelector('span');
+                    const small = slot.querySelector('small');
+                    if (checkLevel > 5) {
+                        span.innerText = 'R';
+                        small.innerText = 'FINAL';
+                    } else {
+                        span.innerText = '?';
+                        small.innerText = '???';
+                    }
+                }
+
                 if (checkLevel > i + 1) {
                     slot.classList.add('unlocked');
                     if (progress > 0) {
