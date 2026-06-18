@@ -24,15 +24,14 @@
 
         #game-container {
             position: relative;
-            width: 95vw;
-            max-width: 800px;
-            aspect-ratio: 2 / 1;
+            width: 800px;
+            height: 400px;
+            flex-shrink: 0;
             border: 2px solid rgba(255, 255, 255, 0.1);
             box-shadow: 0 0 20px rgba(0, 242, 255, 0.2);
             border-radius: 12px;
             overflow: hidden;
             background: #000;
-            /* Transition only style effects to prevent canvas measurement glitches */
             transition: box-shadow 0.5s ease, border-color 0.5s ease;
         }
 
@@ -248,13 +247,7 @@
         }
 
         /* Mobile Optimization */
-        @media screen and (orientation: portrait) and (max-width: 900px) {
-            #game-container {
-                width: 95vw;
-                height: auto;
-                aspect-ratio: 2 / 1;
-                max-width: none;
-            }
+        @media screen and (max-width: 900px) {
             .settings-modal {
                 max-height: 80vw;
             }
