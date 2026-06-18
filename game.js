@@ -55,7 +55,8 @@
             { id: 'dash', key: 'e', duration: 250, cd: 3000, lastUsed: 0, active: false },
             { id: 'blink', key: 'q', duration: 150, cd: 6000, lastUsed: 0, active: false },
             { id: 'shield', key: ' ', duration: 4500, cd: 13000, lastUsed: 0, active: false },
-            { id: 'chrono', key: 'Shift', duration: 3500, cd: 16000, lastUsed: 0, active: false }
+            { id: 'chrono', key: 'Shift', duration: 3500, cd: 16000, lastUsed: 0, active: false },
+            { id: 'final', key: 'r', duration: 5000, cd: 25000, lastUsed: 0, active: false }
         ];
 
         const player = { x: 40, y: 250, w: 15, h: 100, baseH: 100, score: 0, color: "#00f2ff", targetY: 250, stunTimer: 0 };
@@ -512,7 +513,7 @@
         });
         window.addEventListener("keyup", e => keys[e.key] = false);
 
-        for (let i = 0; i < 4; i++) {
+        for (let i = 0; i < 5; i++) {
             const slot = document.getElementById(`slot-${i}`);
             
             const handleSlotActivate = (e) => {
@@ -885,7 +886,12 @@
                 player.h = 20;
             } else {
                 player.w = 15;
-                player.h = abilities[2].active ? 150 : player.baseH; // Titan Shield (now abilities[2])
+                if (abilities[4] && abilities[4].active) {
+                    player.h = 600; // Final Soul Ultimate Defense
+                    player.y = 0;
+                } else {
+                    player.h = abilities[2].active ? 150 : player.baseH; // Titan Shield
+                }
             }
 
             let laserTimeScale = (currentLevel === 5 && (ai.isTargeting || bossProjectiles.length > 0)) ? 0.4 : 1.0;
@@ -1074,9 +1080,9 @@
                         }
 
                     } else if (currentLevel === 6) { // STANDARD PLAY GAISMAGORM ACTIONS
-                        ai.charge += 0.08;
+                        ai.charge += 0.04;
                         ai.skyLaserTimer++;
-                        if (ai.skyLaserTimer > 350) {
+                        if (ai.skyLaserTimer > 500) {
                             ai.skyLaserMarkers = [Math.random() * 300 + 50, Math.random() * 300 + 350];
                             ai.skyLaserTimer = 0;
                             setTimeout(() => {
@@ -1090,7 +1096,7 @@
                         if (ai.isSwiping) {
                             ai.swipeTimer--; ai.y += ai.swipeDir * 15;
                             if (targetBall.x > ai.x - 50 && Math.abs(targetBall.y - (ai.y + ai.h/2)) < 100) { 
-                                targetBall.dx = -targetBall.speed * 2; 
+                                targetBall.dx = -targetBall.speed * 1.3; 
                                 targetBall.dy += ai.swipeDir * 5; 
                                 createShatterParticles(targetBall.x, targetBall.y, "var(--abyssal-purple)");
                             }
