@@ -541,8 +541,8 @@
             if (isPortrait) {
                 const percentX = (clientX - rect.left) / rect.width;
                 const percentY = (clientY - rect.top) / rect.height;
-                y = (1 - percentX) * 600;
-                x = percentY * 1200;
+                y = percentX * 600;
+                x = (1 - percentY) * 1200;
             } else {
                 x = ((clientX - rect.left) / rect.width) * 1200;
                 y = ((clientY - rect.top) / rect.height) * 600;

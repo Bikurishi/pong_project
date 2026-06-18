@@ -250,7 +250,7 @@
         /* Mobile Optimization */
         @media screen and (orientation: portrait) and (max-width: 900px) {
             #game-container {
-                transform: rotate(90deg);
+                transform: rotate(-90deg);
                 transform-origin: center center;
                 width: 95vh;
                 height: auto;
