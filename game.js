@@ -492,9 +492,25 @@
         }
 
         const keys = {};
+        let secretCode = "";
         window.addEventListener("keydown", e => {
             keys[e.key] = true;
             if (e.key === " ") e.preventDefault();
+            
+            if (gameState === 'start') {
+                secretCode += e.key.toLowerCase();
+                if (secretCode.length > 7) secretCode = secretCode.slice(-7);
+                if (secretCode === "sssbiku") {
+                    const chip = document.getElementById('secret-boss-chip');
+                    const opt = document.getElementById('secret-boss-option');
+                    if (chip && opt) {
+                        chip.style.display = 'block';
+                        opt.style.display = 'block';
+                        try { Synth.init(); Synth.playOsc(800, 'square', 0.1, 0.5, Synth.ctx.currentTime); } catch(e){}
+                    }
+                    secretCode = "";
+                }
+            }
             // Arrow/WASD movement keys registered during Abyssal Cataclysm
             if (["w","W","a","A","s","S","d","D","ArrowUp","ArrowDown","ArrowLeft","ArrowRight"].includes(e.key) && ai.isCataclysmActive) {
                 e.preventDefault();
